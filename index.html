@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KeToan – Phần Mềm Kế Toán Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <canvas id="particles"></canvas>
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-gsap="fade-up">Phần mềm kế toán KeToan</div>
+    <h1 class="hero-headline" data-gsap="fade-up" data-delay=".1">
+      <em>"Tự động nhập liệu<br>tối ưu năng suất"</em>
+    </h1>
+    <div class="x10-badge" data-gsap="zoom-in" data-delay=".25">
+      <span class="x10-x">X</span><span class="x10-num">10</span>
+    </div>
+    <div class="hero-gift" data-gsap="fade-up" data-delay=".35">
+      🎁 Tặng <strong>100 số hóa đơn đầu</strong> hoàn toàn miễn phí
+    </div>
+    <div class="hero-features" data-gsap="fade-up" data-delay=".43">
+      <div class="hero-feat"><div class="feat-icon">🖥️</div><div>Miễn phí<br><strong>Phần mềm hóa đơn</strong></div></div>
+      <div class="hero-feat"><div class="feat-icon">🔗</div><div>Miễn phí kết nối<br><strong>Hóa đơn điện tử</strong></div></div>
+    </div>
+    <div class="hero-cta" data-gsap="fade-up" data-delay=".52">
+      <button class="btn-outline" style="color:#fff;border-color:rgba(255,255,255,.7)">TƯ VẤN MIỄN PHÍ</button>
+      <a href="#" class="btn-brand" style="padding:14px 32px;font-size:14px;">DÙNG THỬ MIỄN PHÍ</a>
+    </div>
+  </div>
+  <div class="hero-phone" data-gsap="slide-left" data-delay=".2">
+    <div class="phone-wrap">
+      <div class="phone-outer"><div class="phone-screen">
+        <div class="phone-notch"></div>
+        <div class="phone-header">📊 Tổng quan tháng 5</div>
+        <div class="phone-stats">
+          <div class="pstat up"><strong>+28%</strong>Doanh thu</div>
+          <div class="pstat"><strong>₫2.4M</strong>Tháng này</div>
+          <div class="pstat"><strong>348</strong>Hóa đơn</div>
+          <div class="pstat up"><strong>+12%</strong>Lợi nhuận</div>
+        </div>
+        <div class="phone-chart">
+          <div class="bar bar-pink"   style="--h:42px"></div>
+          <div class="bar bar-purple" style="--h:58px"></div>
+          <div class="bar bar-pink2"  style="--h:35px"></div>
+          <div class="bar bar-pink"   style="--h:52px"></div>
+          <div class="bar bar-purple" style="--h:66px"></div>
+          <div class="bar bar-pink2"  style="--h:46px"></div>
+        </div>
+      </div></div>
+      <div class="float-badge badge-1">✅ Đã hạch toán tự động</div>
+      <div class="float-badge badge-2">📈 Lợi nhuận +28%</div>
+    </div>
+  </div>
+  <div class="hero-ray"></div>
+</section>
+
+<!-- MARQUEE injected by JS -->
+<div id="marquee-slot"></div>
+
+<!-- ABOUT -->
+<section class="section-pad" id="ve-chung-toi" style="background:var(--white)">
+  <div class="section-head" data-gsap="fade-up">
+    <div class="section-label">Giới thiệu</div>
+    <h2 class="section-title">Phần mềm kế toán online KeToan</h2>
+    <p class="section-sub">Đáp ứng đầy đủ nghiệp vụ kế toán doanh nghiệp, hộ kinh doanh, kế toán dịch vụ theo TT99, T133, TT152.</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="card-icon">🧾</div>
+      <h3>Kế toán doanh nghiệp</h3>
+      <p>Xử lý toàn bộ nghiệp vụ kế toán theo chuẩn mực Việt Nam. Phù hợp doanh nghiệp vừa và lớn theo TT133, TT200.</p>
+    </div>
+    <div class="about-card">
+      <div class="card-icon">🏪</div>
+      <h3>Hộ kinh doanh</h3>
+      <p>Giải pháp đơn giản dành cho hộ kinh doanh cá thể. Quản lý doanh thu, chi phí, hàng tồn kho dễ dàng.</p>
+    </div>
+    <div class="about-card">
+      <div class="card-icon">⚡</div>
+      <h3>Tự động hóa cao</h3>
+      <p>Tự động nhập liệu từ hóa đơn điện tử, ngân hàng, bán hàng. Tiết kiệm đến 90% thời gian thủ công.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item" data-gsap="fade-up"><span class="stat-num" data-count="50000">0</span><div class="stat-unit">+</div><div class="stat-label">Doanh nghiệp tin dùng</div></div>
+  <div class="stat-item" data-gsap="fade-up" data-delay=".1"><span class="stat-num" data-count="10">0</span><div class="stat-unit">năm</div><div class="stat-label">Kinh nghiệm phát triển</div></div>
+  <div class="stat-item" data-gsap="fade-up" data-delay=".2"><span class="stat-num" data-count="99">0</span><div class="stat-unit">%</div><div class="stat-label">Uptime đảm bảo</div></div>
+  <div class="stat-item" data-gsap="fade-up" data-delay=".3"><span class="stat-num" data-count="24">0</span><div class="stat-unit">/7</div><div class="stat-label">Hỗ trợ kỹ thuật</div></div>
+</div>
+
+<!-- FEATURES -->
+<section class="section-pad" id="tinh-nang" style="background:var(--gray-soft)">
+  <div class="section-head" data-gsap="fade-up">
+    <div class="section-label">Tính năng</div>
+    <h2 class="section-title">Đầy đủ nghiệp vụ kế toán</h2>
+    <p class="section-sub">Tất cả tính năng trong một nền tảng. <a href="tinh-nang.html" style="color:var(--pink);font-weight:700;">Xem tất cả →</a></p>
+  </div>
+  <div class="features-grid">
+    <a href="tinh-nang/ke-toan-tong-hop.html" class="feat-card"><div class="feat-num">01</div><div><h3>Kế toán tổng hợp</h3><p>Xử lý toàn bộ chứng từ, sổ sách và báo cáo theo chuẩn VAS. Tự động bút toán kết chuyển cuối kỳ.</p></div></a>
+    <a href="tinh-nang/hoa-don-dien-tu.html"  class="feat-card"><div class="feat-num">02</div><div><h3>Hoá đơn điện tử</h3><p>Phát hành, tra cứu, đồng bộ hóa đơn điện tử trực tiếp với Tổng cục Thuế. Không cần phần mềm khác.</p></div></a>
+    <a href="tinh-nang/ket-noi-ngan-hang.html" class="feat-card"><div class="feat-num">03</div><div><h3>Kết nối ngân hàng</h3><p>Tự động nhận sao kê, đối chiếu và hạch toán. Hỗ trợ hơn 40 ngân hàng tại Việt Nam.</p></div></a>
+    <a href="tinh-nang/quan-ly-thue.html"      class="feat-card"><div class="feat-num">04</div><div><h3>Quản lý thuế</h3><p>Lập tờ khai VAT, thuế TNDN tự động. Nhắc lịch nộp thuế, kết xuất file XML nộp thuế điện tử.</p></div></a>
+    <a href="tinh-nang/quan-ly-kho.html"       class="feat-card"><div class="feat-num">05</div><div><h3>Quản lý kho</h3><p>Theo dõi nhập - xuất - tồn kho thời gian thực. Cảnh báo hàng tồn thấp, hàng sắp hết hạn.</p></div></a>
+    <a href="tinh-nang/bao-cao-tai-chinh.html" class="feat-card"><div class="feat-num">06</div><div><h3>Báo cáo tài chính</h3><p>Dashboard trực quan, báo cáo lãi lỗ, bảng cân đối, dòng tiền. Xuất Excel, PDF một chạm.</p></div></a>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section-pad" id="bang-gia" style="background:var(--white)">
+  <div class="section-head" data-gsap="fade-up">
+    <div class="section-label">Bảng giá</div>
+    <h2 class="section-title">Chọn gói phù hợp</h2>
+    <p class="section-sub">Dùng thử miễn phí 30 ngày, không cần thẻ tín dụng.</p>
+  </div>
+  <div class="pricing-cards">
+    <div class="price-card">
+      <div class="price-plan">Cơ Bản</div>
+      <div class="price-amount">Miễn phí</div>
+      <div class="price-unit">mãi mãi</div>
+      <ul class="price-features">
+        <li><span class="chk">✓</span>1 người dùng</li>
+        <li><span class="chk">✓</span>100 hóa đơn/tháng</li>
+        <li><span class="chk">✓</span>Báo cáo cơ bản</li>
+        <li><span class="chk">✓</span>Hỗ trợ email</li>
+      </ul>
+      <button class="btn-plan">Dùng miễn phí</button>
+    </div>
+    <div class="price-card featured">
+      <div class="badge-popular">PHỔ BIẾN</div>
+      <div class="price-plan">Doanh Nghiệp</div>
+      <div class="price-amount">490K</div>
+      <div class="price-unit">/ tháng / công ty</div>
+      <ul class="price-features">
+        <li><span class="chk">✓</span>5 người dùng</li>
+        <li><span class="chk">✓</span>Không giới hạn hóa đơn</li>
+        <li><span class="chk">✓</span>Kết nối ngân hàng</li>
+        <li><span class="chk">✓</span>Hóa đơn điện tử</li>
+        <li><span class="chk">✓</span>Hỗ trợ 24/7</li>
+      </ul>
+      <button class="btn-plan">Dùng thử miễn phí</button>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Dịch Vụ Kế Toán</div>
+      <div class="price-amount">990K</div>
+      <div class="price-unit">/ tháng / văn phòng</div>
+      <ul class="price-features">
+        <li><span class="chk">✓</span>Không giới hạn user</li>
+        <li><span class="chk">✓</span>Quản lý nhiều công ty</li>
+        <li><span class="chk">✓</span>API tích hợp</li>
+        <li><span class="chk">✓</span>Báo cáo tùy chỉnh</li>
+        <li><span class="chk">✓</span>Tư vấn kế toán riêng</li>
+      </ul>
+      <button class="btn-plan">Tư vấn ngay</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA + FOOTER injected by components.js -->
+<div id="cta-slot"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="components.js"></script>
+<script>
+  renderNavbar("home");
+  renderSocialFloat();
+  const mq = renderMarquee();
+  document.getElementById("marquee-slot").replaceWith(mq);
+  const cta = renderCTABand();
+  document.getElementById("cta-slot").replaceWith(cta);
+  renderFooter();
+</script>
+<script src="main.js"></script>
+</body>
+</html>

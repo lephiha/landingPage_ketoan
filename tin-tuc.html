@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tin tức – KeToan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Extra styles specific to news page ── */
+    .news-hero-bg {
+      background: var(--grad-hero);
+      padding: 60px 48px 52px; position: relative; overflow: hidden;
+    }
+    .news-hero-bg::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse 700px 300px at 60% 80%, rgba(200,57,106,.18) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    /* article detail overlay */
+    .article-overlay {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(20,5,40,.55); backdrop-filter: blur(4px);
+      align-items: flex-start; justify-content: center;
+      padding: 40px 20px; overflow-y: auto;
+    }
+    .article-overlay.open { display: flex; }
+    .article-modal {
+      background: #fff; border-radius: 24px;
+      max-width: 760px; width: 100%;
+      box-shadow: 0 32px 80px rgba(0,0,0,.3);
+      overflow: hidden;
+      animation: modalIn .35s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes modalIn { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
+    .article-modal-header {
+      background: var(--grad-hero);
+      padding: 40px 40px 36px; position: relative;
+    }
+    .article-modal-header .news-tag { margin-bottom: 14px; background: rgba(255,255,255,.18); color: #fff; }
+    .article-modal-header h2 { font-size: 26px; font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 12px; }
+    .article-modal-header .meta { color: rgba(255,255,255,.65); font-size: 13px; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,.15); border: none; cursor: pointer;
+      color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.28); }
+    .article-modal-body { padding: 36px 40px; }
+    .article-modal-body p { font-size: 15px; color: var(--gray-text); line-height: 1.85; margin-bottom: 18px; }
+    .article-modal-body h3 { font-size: 18px; font-weight: 800; color: var(--text-dark); margin: 28px 0 12px; }
+    .article-modal-body ul { padding-left: 20px; margin-bottom: 16px; }
+    .article-modal-body ul li { font-size: 14.5px; color: var(--gray-text); line-height: 1.75; margin-bottom: 6px; }
+    .article-modal-body .highlight-box {
+      background: var(--pink-pale); border-left: 4px solid var(--pink);
+      border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 20px 0;
+      font-size: 14.5px; color: var(--text-dark); font-weight: 600; line-height: 1.6;
+    }
+    .article-cta-box {
+      background: var(--grad-brand); border-radius: 16px;
+      padding: 24px 28px; margin-top: 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    }
+    .article-cta-box p { color: rgba(255,255,255,.85); font-size: 14px; margin: 4px 0 0; }
+    .article-cta-box h4 { color: #fff; font-size: 16px; font-weight: 800; }
+    /* search bar */
+    .search-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.25);
+      border-radius: 28px; padding: 10px 20px; max-width: 400px;
+    }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      color: #fff; font-size: 14px; font-family: inherit; flex: 1;
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,.5); }
+    .search-bar button { background: none; border: none; cursor: pointer; color: rgba(255,255,255,.7); font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<section class="news-hero-bg">
+  <div class="breadcrumb" data-gsap="fade-up" style="margin-bottom:20px;">
+    <a href="index.html">Trang chủ</a><span>›</span>
+    <span style="color:rgba(255,255,255,.9)">Tin tức</span>
+  </div>
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;z-index:2;">
+    <div>
+      <div class="section-label" style="color:#E899B8" data-gsap="fade-up">Tin tức & Kiến thức</div>
+      <h1 class="section-title" style="color:#fff;font-size:36px;" data-gsap="fade-up" data-delay=".08">Cập nhật thuế, kế toán &<br>tin KeToan mới nhất</h1>
+      <p style="color:rgba(255,255,255,.7);font-size:14.5px;margin-top:8px;max-width:480px;" data-gsap="fade-up" data-delay=".14">Thông tin thuế & chính sách mới nhất, nghiệp vụ kế toán thực tế, mẫu biểu và công cụ hữu ích.</p>
+    </div>
+    <div data-gsap="fade-up" data-delay=".18">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm bài viết..."/>
+        <button onclick="doSearch()">🔍</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER TABS -->
+<div style="background:#fff;border-bottom:1px solid var(--gray-border);padding:0 48px;">
+  <div class="news-filter" style="margin:0;padding:16px 0;">
+    <button class="filter-btn active" data-cat="all">Tất cả</button>
+    <button class="filter-btn" data-cat="thue">📋 Thuế & Chính sách</button>
+    <button class="filter-btn" data-cat="nghiep-vu">📊 Nghiệp vụ kế toán</button>
+    <button class="filter-btn" data-cat="mau-bieu">📝 Mẫu biểu & Công cụ</button>
+    <button class="filter-btn" data-cat="khuyen-mai">🎁 Tin KeToan</button>
+    <button class="filter-btn" data-cat="chung">📰 Tin tức chung</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<section class="section-pad" style="background:var(--gray-soft);">
+  <div class="news-layout">
+
+    <!-- ARTICLES -->
+    <div>
+      <div class="news-grid" id="newsGrid">
+
+        <!-- FEATURED -->
+        <div class="news-card news-card-featured" data-cat="thue" onclick="openArticle('art1')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:var(--grad-hero);display:flex;align-items:center;justify-content:center;font-size:72px;">📋</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Thuế & Chính sách</span>
+            <h3>Chính sách giảm thuế GTGT dành cho hộ kinh doanh áp dụng đến hết năm 2026</h3>
+            <p>Chính sách giảm thuế GTGT dành cho hộ kinh doanh đang tiếp tục được áp dụng đến hết năm 2026 theo Nghị quyết mới nhất của Quốc hội. Doanh nghiệp và hộ kinh doanh cần nắm rõ điều kiện và cách áp dụng để không bỏ lỡ ưu đãi này...</p>
+            <div class="news-meta">📅 15 Tháng 5, 2026 &nbsp;·&nbsp; ⏱ 5 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="thue" onclick="openArticle('art2')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#7C3F8E,#C8396A);display:flex;align-items:center;justify-content:center;font-size:52px;">🏛️</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Thuế & Chính sách</span>
+            <h3>Chính thức bỏ ngưỡng chịu thuế 500 triệu đồng đối với hộ kinh doanh</h3>
+            <p>Quốc hội chính thức thông qua luật sửa đổi, bổ sung 4 luật thuế quan trọng, chính thức bỏ ngưỡng 500 triệu...</p>
+            <div class="news-meta">📅 24 Tháng 4, 2026 &nbsp;·&nbsp; ⏱ 4 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="nghiep-vu" onclick="openArticle('art3')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#1341C8,#7C3F8E);display:flex;align-items:center;justify-content:center;font-size:52px;">📊</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Nghiệp vụ kế toán</span>
+            <h3>Hướng dẫn lập bảng cân đối kế toán theo TT200 từ A đến Z</h3>
+            <p>Bảng cân đối kế toán là một trong những báo cáo tài chính quan trọng nhất. Bài viết này hướng dẫn chi tiết cách lập theo TT200...</p>
+            <div class="news-meta">📅 10 Tháng 4, 2026 &nbsp;·&nbsp; ⏱ 8 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="mau-bieu" onclick="openArticle('art4')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#C8396A,#FF8C2A);display:flex;align-items:center;justify-content:center;font-size:52px;">📝</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Mẫu biểu & Công cụ</span>
+            <h3>Tổng hợp 20 mẫu bảng lương Excel chuẩn nhất cho doanh nghiệp 2026</h3>
+            <p>Bộ sưu tập mẫu bảng lương Excel đầy đủ nhất, cập nhật theo quy định BHXH và thuế TNCN mới nhất năm 2026, tải về miễn phí...</p>
+            <div class="news-meta">📅 5 Tháng 4, 2026 &nbsp;·&nbsp; ⏱ 3 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="khuyen-mai" onclick="openArticle('art5')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:var(--grad-brand);display:flex;align-items:center;justify-content:center;font-size:52px;">🎁</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Tin KeToan</span>
+            <h3>KeToan ra mắt tính năng kết nối ngân hàng tự động — Hỗ trợ 40+ ngân hàng</h3>
+            <p>KeToan chính thức ra mắt tính năng Open Banking, cho phép tự động đồng bộ sao kê từ hơn 40 ngân hàng tại Việt Nam...</p>
+            <div class="news-meta">📅 1 Tháng 4, 2026 &nbsp;·&nbsp; ⏱ 3 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="nghiep-vu" onclick="openArticle('art6')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#0A1F6E,#7C3F8E);display:flex;align-items:center;justify-content:center;font-size:52px;">💡</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Nghiệp vụ kế toán</span>
+            <h3>5 lỗi kế toán phổ biến nhất khi xử lý hóa đơn điện tử và cách khắc phục</h3>
+            <p>Sai sót trong xử lý hóa đơn điện tử có thể gây ra hậu quả nghiêm trọng khi thanh tra thuế. Bài viết phân tích 5 lỗi thường gặp nhất...</p>
+            <div class="news-meta">📅 22 Tháng 3, 2026 &nbsp;·&nbsp; ⏱ 6 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="chung" onclick="openArticle('art7')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#16a34a,#1341C8);display:flex;align-items:center;justify-content:center;font-size:52px;">🌏</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Tin tức chung</span>
+            <h3>Xu hướng chuyển đổi số trong kế toán — Doanh nghiệp Việt đang ở đâu?</h3>
+            <p>Khảo sát mới nhất cho thấy 72% doanh nghiệp vừa và nhỏ tại Việt Nam đã hoặc đang có kế hoạch chuyển sang phần mềm kế toán cloud...</p>
+            <div class="news-meta">📅 15 Tháng 3, 2026 &nbsp;·&nbsp; ⏱ 7 phút đọc</div>
+          </div>
+        </div>
+
+        <div class="news-card" data-cat="mau-bieu" onclick="openArticle('art8')">
+          <div class="news-card-img">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#7C3F8E,#0A1F6E);display:flex;align-items:center;justify-content:center;font-size:52px;">🧮</div>
+          </div>
+          <div class="news-card-body">
+            <span class="news-tag">Mẫu biểu & Công cụ</span>
+            <h3>Công cụ tính thuế TNCN online 2026 — Miễn phí, chính xác, nhanh chóng</h3>
+            <p>Sử dụng công cụ tính thuế TNCN trực tuyến của KeToan để tính nhanh số thuế phải nộp theo biểu thuế lũy tiến 2026...</p>
+            <div class="news-meta">📅 8 Tháng 3, 2026 &nbsp;·&nbsp; ⏱ 2 phút đọc</div>
+          </div>
+        </div>
+
+      </div><!-- /news-grid -->
+
+      <!-- PAGINATION -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:40px;" id="pagination">
+        <button class="filter-btn active" style="width:38px;height:38px;padding:0;border-radius:50%;">1</button>
+        <button class="filter-btn" style="width:38px;height:38px;padding:0;border-radius:50%;">2</button>
+        <button class="filter-btn" style="width:38px;height:38px;padding:0;border-radius:50%;">3</button>
+        <span style="color:var(--gray-text);">...</span>
+        <button class="filter-btn" style="width:38px;height:38px;padding:0;border-radius:50%;">8</button>
+        <button class="filter-btn" style="padding:8px 18px;">Tiếp →</button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <!-- Ad widget -->
+      <div class="ads-widget" data-gsap="fade-up">
+        <h4>Phần mềm kế toán<br>KeToan</h4>
+        <p>Tự động hóa kế toán X10 năng suất. Tặng 100 số hóa đơn đầu.</p>
+        <a href="index.html" class="btn-white" style="display:block;text-align:center;padding:11px 20px;font-size:13px;">DÙNG THỬ MIỄN PHÍ</a>
+      </div>
+
+      <!-- Hot topics -->
+      <div class="sidebar-widget" data-gsap="fade-up" data-delay=".1">
+        <h4>🔥 Chủ đề nổi bật</h4>
+        <ul class="sidebar-list">
+          <li>
+            <a href="#" onclick="filterCat('thue')">Thuế GTGT 2026</a>
+            <div class="meta">12 bài viết</div>
+          </li>
+          <li>
+            <a href="#" onclick="filterCat('nghiep-vu')">Hóa đơn điện tử</a>
+            <div class="meta">8 bài viết</div>
+          </li>
+          <li>
+            <a href="#" onclick="filterCat('mau-bieu')">Mẫu biểu miễn phí</a>
+            <div class="meta">24 mẫu</div>
+          </li>
+          <li>
+            <a href="#" onclick="filterCat('nghiep-vu')">Kế toán theo TT200</a>
+            <div class="meta">15 bài viết</div>
+          </li>
+          <li>
+            <a href="#" onclick="filterCat('thue')">Thuế TNCN lũy tiến</a>
+            <div class="meta">6 bài viết</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Recent posts -->
+      <div class="sidebar-widget" data-gsap="fade-up" data-delay=".15">
+        <h4>📰 Bài viết gần đây</h4>
+        <ul class="sidebar-list">
+          <li>
+            <a href="#" onclick="openArticle('art1')">Chính sách giảm thuế GTGT cho hộ kinh doanh</a>
+            <div class="meta">15/05/2026</div>
+          </li>
+          <li>
+            <a href="#" onclick="openArticle('art2')">Bỏ ngưỡng chịu thuế 500 triệu đồng</a>
+            <div class="meta">24/04/2026</div>
+          </li>
+          <li>
+            <a href="#" onclick="openArticle('art5')">KeToan ra mắt kết nối ngân hàng tự động</a>
+            <div class="meta">01/04/2026</div>
+          </li>
+          <li>
+            <a href="#" onclick="openArticle('art3')">Lập bảng cân đối kế toán theo TT200</a>
+            <div class="meta">10/04/2026</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="sidebar-widget" data-gsap="fade-up" data-delay=".2" style="background:var(--pink-pale);border:1.5px solid rgba(200,57,106,.15);">
+        <h4>📬 Nhận bản tin hàng tuần</h4>
+        <p style="font-size:13px;color:var(--gray-text);margin-bottom:14px;line-height:1.6;">Cập nhật thuế, kế toán mới nhất gửi thẳng vào email của bạn.</p>
+        <input type="email" placeholder="Email của bạn..." style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--gray-border);font-family:inherit;font-size:13px;margin-bottom:10px;outline:none;"/>
+        <button class="btn-brand" style="width:100%;padding:11px;">Đăng ký ngay</button>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<!-- ── ARTICLE MODAL ── -->
+<div class="article-overlay" id="articleOverlay" onclick="closeIfBackdrop(event)">
+  <div class="article-modal" id="articleModal">
+    <div class="article-modal-header" id="modalHeader">
+      <button class="modal-close" onclick="closeArticle()">✕</button>
+      <span class="news-tag" id="modalTag"></span>
+      <h2 id="modalTitle"></h2>
+      <div class="meta" id="modalMeta"></div>
+    </div>
+    <div class="article-modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div id="cta-slot"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="components.js"></script>
+<script>
+  renderNavbar("tin-tuc");
+  renderSocialFloat();
+  const cta = renderCTABand();
+  document.getElementById("cta-slot").replaceWith(cta);
+  renderFooter();
+
+  /* ── ARTICLE DATA ── */
+  const articles = {
+    art1: {
+      tag: "Thuế & Chính sách",
+      title: "Chính sách giảm thuế GTGT dành cho hộ kinh doanh áp dụng đến hết năm 2026",
+      meta: "📅 15 Tháng 5, 2026  ·  ⏱ 5 phút đọc  ·  ✍️ Ban Biên tập KeToan",
+      body: `
+        <p>Theo Nghị quyết số 43/2026/QH15 của Quốc hội, chính sách giảm thuế GTGT tiếp tục được duy trì đến hết ngày 31/12/2026. Đây là tin vui đối với hàng triệu hộ kinh doanh và doanh nghiệp nhỏ đang hoạt động tại Việt Nam.</p>
+        <div class="highlight-box">⚡ Mức giảm thuế GTGT áp dụng là 2%, từ 10% xuống còn 8% cho hầu hết hàng hóa, dịch vụ không thuộc diện chịu thuế suất 5% hoặc không chịu thuế.</div>
+        <h3>Đối tượng áp dụng</h3>
+        <ul>
+          <li>Hộ kinh doanh đăng ký thuế theo phương pháp kê khai</li>
+          <li>Doanh nghiệp nhỏ và vừa (doanh thu dưới 200 tỷ đồng/năm)</li>
+          <li>Các tổ chức kinh tế khác không thuộc diện miễn thuế GTGT</li>
+        </ul>
+        <h3>Cách áp dụng trên KeToan</h3>
+        <p>KeToan đã tự động cập nhật mức thuế suất 8% vào danh mục hàng hóa, dịch vụ. Khi phát hành hóa đơn, hệ thống tự động chọn đúng thuế suất, không cần điều chỉnh thủ công.</p>
+        <ul>
+          <li>Vào <strong>Danh mục → Hàng hóa/Dịch vụ</strong> để kiểm tra thuế suất</li>
+          <li>Khi tạo hóa đơn, chọn đúng loại hàng hóa, thuế suất sẽ tự điền</li>
+          <li>Tờ khai VAT hàng tháng tự động tổng hợp đúng theo mức 8%</li>
+        </ul>
+        <div class="article-cta-box">
+          <div><h4>Tự động hóa kế toán thuế với KeToan</h4><p>Không lo sai sót thuế suất, tờ khai tự động, nhắc lịch nộp thuế.</p></div>
+          <a href="index.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Dùng thử miễn phí</a>
+        </div>
+      `
+    },
+    art2: {
+      tag: "Thuế & Chính sách",
+      title: "Chính thức bỏ ngưỡng chịu thuế 500 triệu đồng đối với hộ kinh doanh",
+      meta: "📅 24 Tháng 4, 2026  ·  ⏱ 4 phút đọc  ·  ✍️ Ban Biên tập KeToan",
+      body: `
+        <p>Sáng 24/4/2026, Quốc hội chính thức thông qua Luật sửa đổi, bổ sung một số điều của Luật Thuế GTGT, Thuế TNDN, Thuế TNCN và Quản lý thuế, có hiệu lực từ ngày 1/7/2026.</p>
+        <div class="highlight-box">⚠️ Quan trọng: Từ 1/7/2026, hộ kinh doanh có doanh thu từ 1 đồng trở lên đều phải kê khai và nộp thuế GTGT, thuế TNCN. Không còn ngưỡng miễn thuế 500 triệu đồng.</div>
+        <h3>Những thay đổi chính</h3>
+        <ul>
+          <li>Bỏ quy định hộ kinh doanh có doanh thu dưới 100 triệu đồng/năm không phải nộp thuế</li>
+          <li>Bỏ ngưỡng chịu thuế 500 triệu đồng (quy định cũ tại Thông tư 40/2021)</li>
+          <li>Áp dụng thuế khoán cho hộ có doanh thu dưới 1 tỷ đồng/năm</li>
+          <li>Hộ doanh thu từ 1 tỷ đồng trở lên bắt buộc chuyển sang kê khai theo phương pháp khấu trừ</li>
+        </ul>
+        <h3>Hộ kinh doanh cần làm gì ngay?</h3>
+        <p>Các hộ kinh doanh cần đăng ký mã số thuế (nếu chưa có), cập nhật phương pháp kê khai thuế và sử dụng phần mềm kế toán để quản lý doanh thu, chi phí chính xác.</p>
+        <div class="article-cta-box">
+          <div><h4>KeToan có gói dành riêng cho Hộ kinh doanh</h4><p>Đơn giản, gọn nhẹ, tuân thủ đúng quy định mới từ 1/7/2026.</p></div>
+          <a href="index.html#bang-gia" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Xem bảng giá</a>
+        </div>
+      `
+    },
+    art3: {
+      tag: "Nghiệp vụ kế toán",
+      title: "Hướng dẫn lập bảng cân đối kế toán theo TT200 từ A đến Z",
+      meta: "📅 10 Tháng 4, 2026  ·  ⏱ 8 phút đọc  ·  ✍️ Chuyên gia KeToan",
+      body: `
+        <p>Bảng cân đối kế toán (Balance Sheet) là báo cáo tài chính phản ánh toàn bộ tài sản, nguồn vốn của doanh nghiệp tại một thời điểm nhất định. Đây là một trong 4 báo cáo tài chính bắt buộc theo TT200.</p>
+        <h3>Cấu trúc bảng cân đối kế toán theo TT200</h3>
+        <ul>
+          <li><strong>Phần A – Tài sản:</strong> Tài sản ngắn hạn + Tài sản dài hạn</li>
+          <li><strong>Phần B – Nguồn vốn:</strong> Nợ phải trả + Vốn chủ sở hữu</li>
+        </ul>
+        <div class="highlight-box">📌 Nguyên tắc cân đối: Tổng Tài sản = Tổng Nguồn vốn (Nợ phải trả + Vốn chủ sở hữu)</div>
+        <h3>Các bước lập bảng cân đối kế toán</h3>
+        <ul>
+          <li>Bước 1: Chuẩn bị số dư các tài khoản kế toán cuối kỳ</li>
+          <li>Bước 2: Phân loại tài khoản theo chỉ tiêu bảng cân đối</li>
+          <li>Bước 3: Điền số liệu vào từng chỉ tiêu theo mẫu B01-DN</li>
+          <li>Bước 4: Kiểm tra cân đối Tài sản = Nguồn vốn</li>
+          <li>Bước 5: So sánh với kỳ trước, giải thích biến động lớn</li>
+        </ul>
+        <p>Với KeToan, toàn bộ quá trình này được thực hiện tự động. Hệ thống lấy số dư tài khoản, phân loại và tổng hợp vào đúng chỉ tiêu của mẫu B01-DN ban hành kèm TT200.</p>
+        <div class="article-cta-box">
+          <div><h4>KeToan tự động lập BCTC theo TT200</h4><p>Không cần làm thủ công, báo cáo sẵn sàng trong 30 giây.</p></div>
+          <a href="tinh-nang/bao-cao-tai-chinh.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Tìm hiểu thêm</a>
+        </div>
+      `
+    },
+    art4: {
+      tag: "Mẫu biểu & Công cụ",
+      title: "Tổng hợp 20 mẫu bảng lương Excel chuẩn nhất cho doanh nghiệp 2026",
+      meta: "📅 5 Tháng 4, 2026  ·  ⏱ 3 phút đọc  ·  ✍️ Team KeToan",
+      body: `
+        <p>Dưới đây là bộ sưu tập 20 mẫu bảng lương Excel đã được cập nhật theo quy định BHXH, thuế TNCN và mức lương tối thiểu vùng mới nhất năm 2026. Tải về hoàn toàn miễn phí.</p>
+        <h3>Danh sách mẫu bảng lương</h3>
+        <ul>
+          <li>Mẫu bảng lương cơ bản (tháng, tuần, giờ)</li>
+          <li>Mẫu bảng lương có tính BHXH, BHYT, BHTN đầy đủ</li>
+          <li>Mẫu bảng lương có tính thuế TNCN lũy tiến 2026</li>
+          <li>Mẫu phiếu lương (payslip) gửi nhân viên</li>
+          <li>Mẫu bảng tổng hợp lương theo phòng ban</li>
+          <li>Mẫu bảng chấm công tháng, tuần</li>
+        </ul>
+        <div class="highlight-box">💡 Mẹo: Thay vì dùng Excel, hãy thử KeToan để tính lương tự động, không sai sót, không mất thời gian nhập liệu.</div>
+        <div class="article-cta-box">
+          <div><h4>Tính lương tự động với KeToan</h4><p>Không cần Excel, không sợ sai BHXH, thuế TNCN.</p></div>
+          <a href="tinh-nang/ke-toan-tien-luong.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Xem tính năng lương</a>
+        </div>
+      `
+    },
+    art5: {
+      tag: "Tin KeToan",
+      title: "KeToan ra mắt tính năng kết nối ngân hàng tự động — Hỗ trợ 40+ ngân hàng",
+      meta: "📅 1 Tháng 4, 2026  ·  ⏱ 3 phút đọc  ·  ✍️ Team KeToan",
+      body: `
+        <p>Chúng tôi vui mừng thông báo KeToan chính thức ra mắt tính năng Open Banking — kết nối ngân hàng tự động, hỗ trợ hơn 40 ngân hàng tại Việt Nam.</p>
+        <div class="highlight-box">🎉 Từ hôm nay, người dùng KeToan có thể kết nối tài khoản ngân hàng và nhận sao kê tự động mà không cần tải file thủ công hay nhập liệu giao dịch.</div>
+        <h3>Ngân hàng được hỗ trợ</h3>
+        <ul>
+          <li>Big 4: Vietcombank, BIDV, Agribank, VietinBank</li>
+          <li>Tư nhân lớn: Techcombank, MB, ACB, VPBank, Sacombank</li>
+          <li>Và hơn 30 ngân hàng khác trong hệ thống NAPAS</li>
+        </ul>
+        <h3>Cách kích hoạt</h3>
+        <ul>
+          <li>Vào <strong>Cài đặt → Kết nối ngân hàng</strong></li>
+          <li>Chọn ngân hàng và xác thực bằng OTP</li>
+          <li>Sao kê sẽ tự động đổ về KeToan mỗi 15 phút</li>
+        </ul>
+        <div class="article-cta-box">
+          <div><h4>Kết nối ngân hàng ngay hôm nay</h4><p>Miễn phí cho tất cả người dùng gói Doanh nghiệp trở lên.</p></div>
+          <a href="tinh-nang/ket-noi-ngan-hang.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Tìm hiểu thêm</a>
+        </div>
+      `
+    },
+    art6: {
+      tag: "Nghiệp vụ kế toán",
+      title: "5 lỗi kế toán phổ biến nhất khi xử lý hóa đơn điện tử và cách khắc phục",
+      meta: "📅 22 Tháng 3, 2026  ·  ⏱ 6 phút đọc  ·  ✍️ Chuyên gia KeToan",
+      body: `
+        <p>Hóa đơn điện tử đã trở thành bắt buộc từ năm 2022, nhưng nhiều kế toán viên vẫn mắc các lỗi nghiêm trọng có thể dẫn đến bị loại chi phí hoặc phạt thuế khi thanh tra.</p>
+        <h3>Lỗi 1: Không đối chiếu hóa đơn đầu vào với cổng thuế</h3>
+        <p>Nhiều kế toán nhận hóa đơn từ nhà cung cấp mà không kiểm tra trạng thái trên Cổng thông tin điện tử Tổng cục Thuế. Hóa đơn có thể đã bị hủy hoặc thay thế.</p>
+        <div class="highlight-box">✅ Cách khắc phục: KeToan tự động đối chiếu trạng thái hóa đơn đầu vào với cổng thuế khi đồng bộ, cảnh báo ngay nếu có hóa đơn bất thường.</div>
+        <h3>Lỗi 2: Sai thời điểm lập hóa đơn</h3>
+        <p>Hóa đơn phải được lập tại thời điểm chuyển giao hàng hóa hoặc hoàn thành dịch vụ, không phải khi nhận tiền. Nhiều doanh nghiệp lập hóa đơn sai thời điểm này.</p>
+        <h3>Lỗi 3: Thông tin người mua không khớp</h3>
+        <p>Tên, địa chỉ, mã số thuế người mua phải chính xác tuyệt đối. Sai sót nhỏ cũng có thể khiến hóa đơn không được chấp nhận khi khai thuế.</p>
+        <h3>Lỗi 4: Không hủy hóa đơn đúng quy trình</h3>
+        <p>Khi cần hủy hoặc điều chỉnh hóa đơn, phải thực hiện đúng quy trình: lập biên bản, hủy trên hệ thống và thông báo với cơ quan thuế.</p>
+        <h3>Lỗi 5: Không lưu trữ đầy đủ</h3>
+        <p>Hóa đơn điện tử phải được lưu trữ tối thiểu 10 năm. Nhiều doanh nghiệp không có hệ thống lưu trữ đảm bảo tính toàn vẹn dữ liệu.</p>
+        <div class="article-cta-box">
+          <div><h4>KeToan giúp bạn tránh 5 lỗi này</h4><p>Tự động kiểm tra, cảnh báo và lưu trữ hóa đơn đúng quy định.</p></div>
+          <a href="tinh-nang/hoa-don-dien-tu.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Xem tính năng HĐĐT</a>
+        </div>
+      `
+    },
+    art7: {
+      tag: "Tin tức chung",
+      title: "Xu hướng chuyển đổi số trong kế toán — Doanh nghiệp Việt đang ở đâu?",
+      meta: "📅 15 Tháng 3, 2026  ·  ⏱ 7 phút đọc  ·  ✍️ Ban Biên tập KeToan",
+      body: `
+        <p>Theo báo cáo Chuyển đổi số doanh nghiệp Việt Nam 2026 của VCCI, 72% doanh nghiệp vừa và nhỏ đã hoặc đang có kế hoạch áp dụng phần mềm kế toán cloud trong 12 tháng tới.</p>
+        <h3>Tình trạng hiện tại</h3>
+        <ul>
+          <li>28% vẫn dùng Excel hoặc làm thủ công hoàn toàn</li>
+          <li>35% đã dùng phần mềm kế toán nhưng là phiên bản desktop cài đặt</li>
+          <li>37% đã chuyển sang phần mềm cloud hoặc đang trong quá trình chuyển đổi</li>
+        </ul>
+        <div class="highlight-box">📊 Doanh nghiệp dùng phần mềm kế toán cloud tiết kiệm trung bình 15 giờ/tháng cho công việc kế toán so với làm thủ công.</div>
+        <h3>Rào cản chính</h3>
+        <ul>
+          <li>Chi phí ban đầu (40% doanh nghiệp cho là rào cản lớn nhất)</li>
+          <li>Lo ngại bảo mật dữ liệu (32%)</li>
+          <li>Khó khăn trong đào tạo nhân viên (18%)</li>
+          <li>Chưa tìm được phần mềm phù hợp (10%)</li>
+        </ul>
+        <p>KeToan ra đời để giải quyết đúng 3 rào cản đầu tiên: gói miễn phí vĩnh viễn, bảo mật chuẩn ngân hàng và giao diện đơn giản dễ dùng ngay mà không cần đào tạo.</p>
+        <div class="article-cta-box">
+          <div><h4>Bắt đầu chuyển đổi số kế toán ngay hôm nay</h4><p>Miễn phí, không cần cài đặt, dùng ngay trong 2 phút.</p></div>
+          <a href="index.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Dùng thử miễn phí</a>
+        </div>
+      `
+    },
+    art8: {
+      tag: "Mẫu biểu & Công cụ",
+      title: "Công cụ tính thuế TNCN online 2026 — Miễn phí, chính xác, nhanh chóng",
+      meta: "📅 8 Tháng 3, 2026  ·  ⏱ 2 phút đọc  ·  ✍️ Team KeToan",
+      body: `
+        <p>KeToan cung cấp công cụ tính thuế thu nhập cá nhân (TNCN) trực tuyến hoàn toàn miễn phí, cập nhật theo biểu thuế lũy tiến mới nhất năm 2026.</p>
+        <div class="highlight-box">🔢 Biểu thuế TNCN lũy tiến 2026: 5% – 10% – 15% – 20% – 25% – 30% – 35% trên 7 bậc thu nhập tính thuế.</div>
+        <h3>Cách tính thuế TNCN nhanh</h3>
+        <ul>
+          <li>Thu nhập tính thuế = Thu nhập chịu thuế – Các khoản giảm trừ</li>
+          <li>Giảm trừ bản thân: 11 triệu đồng/tháng</li>
+          <li>Giảm trừ người phụ thuộc: 4,4 triệu đồng/người/tháng</li>
+          <li>Giảm trừ BHXH, BHYT, BHTN do người lao động đóng</li>
+        </ul>
+        <p>Với KeToan, toàn bộ việc tính thuế TNCN được thực hiện tự động khi tính lương hàng tháng. Bạn chỉ cần nhập số ngày công, hệ thống tự ra bảng lương đầy đủ.</p>
+        <div class="article-cta-box">
+          <div><h4>Tự động hóa tính lương & thuế TNCN</h4><p>Chính xác 100%, tuân thủ quy định 2026.</p></div>
+          <a href="tinh-nang/ke-toan-tien-luong.html" class="btn-white" style="text-decoration:none;padding:11px 22px;font-size:13px;white-space:nowrap;">Xem tính năng lương</a>
+        </div>
+      `
+    },
+  };
+
+  /* ── OPEN ARTICLE ── */
+  function openArticle(id) {
+    const art = articles[id];
+    if (!art) return;
+    document.getElementById("modalTag").textContent   = art.tag;
+    document.getElementById("modalTitle").textContent = art.title;
+    document.getElementById("modalMeta").textContent  = art.meta;
+    document.getElementById("modalBody").innerHTML    = art.body;
+    document.getElementById("articleOverlay").classList.add("open");
+    document.body.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+  }
+  function closeArticle() {
+    document.getElementById("articleOverlay").classList.remove("open");
+    document.body.style.overflow = "";
+  }
+  function closeIfBackdrop(e) {
+    if (e.target === document.getElementById("articleOverlay")) closeArticle();
+  }
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeArticle(); });
+
+  /* ── FILTER ── */
+  function filterCat(cat) {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    const btn = [...document.querySelectorAll(".filter-btn")].find(b => b.dataset.cat === cat);
+    if (btn) btn.classList.add("active");
+    document.querySelectorAll(".news-card").forEach(card => {
+      const show = cat === "all" || card.dataset.cat === cat;
+      card.style.display = show ? "" : "none";
+    });
+  }
+
+  document.querySelectorAll(".filter-btn[data-cat]").forEach(btn => {
+    btn.addEventListener("click", () => filterCat(btn.dataset.cat));
+  });
+
+  /* ── SEARCH ── */
+  function doSearch() {
+    const q = document.getElementById("searchInput").value.toLowerCase().trim();
+    if (!q) { document.querySelectorAll(".news-card").forEach(c => c.style.display = ""); return; }
+    document.querySelectorAll(".news-card").forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(q) ? "" : "none";
+    });
+  }
+  document.getElementById("searchInput").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+
+  /* ── URL PARAM support: ?cat=xxx ── */
+  const urlParams = new URLSearchParams(window.location.search);
+  const catParam = urlParams.get("cat");
+  if (catParam) filterCat(catParam);
+</script>
+<script src="main.js"></script>
+</body>
+</html>
