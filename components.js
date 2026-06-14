@@ -45,7 +45,7 @@ function renderNavbar(activePage = "") {
         </div>
       </div>
 
-      <a href="${root}bang-gia.html" class="nav-link ${activePage==='bang-gia'?'active':''}">Bảng giá</a>
+      <a href="${root}index.html#bang-gia" class="nav-link ${activePage==='bang-gia'?'active':''}">Bảng giá</a>
 
       <!-- Hỗ trợ dropdown -->
       <div class="nav-group">
@@ -70,12 +70,13 @@ function renderNavbar(activePage = "") {
         </div>
       </div>
 
-      <a href="#" class="nav-link">Liên hệ</a>
+      <a href="${root}index.html#dang-ky" class="nav-link">Liên hệ</a>
     </div>
 
     <div class="nav-actions">
-      <a href="tel:0869425631" class="nav-hotline">📞 0869 425 631</a>
-      <a href="#" class="btn-brand" style="padding:9px 20px;font-size:13px;">Đăng ký</a>
+      <a href="tel:0869425631" class="nav-hotline">📞 0392 405 600</a>
+      <a href="https://webapp.letieu8.workers.dev/login" class="btn-outline" style="padding:9px 20px;font-size:13px;">Đăng nhập</a>
+      <button onclick="openRegModal()" class="btn-brand" style="padding:9px 20px;font-size:13px;border:none;cursor:pointer;font-family:inherit;">Đăng ký</button>
     </div>
     <button class="nav-burger" id="burger">☰</button>
   `;
@@ -96,6 +97,80 @@ function renderNavbar(activePage = "") {
     <a href="#" class="btn-brand" style="text-align:center;margin-top:8px;">Đăng ký ngay</a>
   `;
   document.body.insertBefore(drawer, nav.nextSibling);
+
+  // Modal đăng ký
+  const modal = document.createElement("div");
+  modal.id = "regModal";
+  modal.style.cssText = "display:none;position:fixed;inset:0;z-index:9999;background:rgba(20,5,40,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;";
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;max-width:480px;width:100%;padding:36px 32px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.3);animation:modalIn .3s ease;">
+      <button onclick="closeRegModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#999;">✕</button>
+      <h3 style="font-size:15px;font-weight:800;text-align:center;margin-bottom:6px;color:#1A0A2E;">ĐĂNG KÝ NHẬN TƯ VẤN VÀ DÙNG THỬ</h3>
+      <div style="text-align:center;color:#C8396A;font-size:13.5px;font-weight:700;margin-bottom:22px;">🎁 Tặng 100 số hoá đơn đầu vào</div>
+      <form id="modalRegForm" style="display:flex;flex-direction:column;gap:11px;">
+        <input name="name"  type="text"  placeholder="Họ và tên *" required style="padding:12px 15px;border:1.5px solid #EDE5F0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;"/>
+        <input name="email" type="email" placeholder="Email *"      required style="padding:12px 15px;border:1.5px solid #EDE5F0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;"/>
+        <input name="phone" type="tel"   placeholder="Số điện thoại *" required style="padding:12px 15px;border:1.5px solid #EDE5F0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;"/>
+        <input name="tax"   type="text"  placeholder="Mã số thuế"  style="padding:12px 15px;border:1.5px solid #EDE5F0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;"/>
+        <select name="product" style="padding:12px 15px;border:1.5px solid #EDE5F0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;color:#aaa;">
+          <option value="" disabled selected>Chọn sản phẩm quan tâm</option>
+          <option>Kế toán doanh nghiệp</option>
+          <option>Kế toán hộ kinh doanh</option>
+          <option>Dịch vụ kế toán</option>
+          <option>Hóa đơn điện tử</option>
+        </select>
+        <button type="submit" style="padding:14px;background:linear-gradient(135deg,#C8396A,#7C3F8E);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:4px;">NHẬN TƯ VẤN NGAY</button>
+      </form>
+      <div id="modalSuccess" style="display:none;text-align:center;padding:24px 0;">
+        <div style="font-size:52px;margin-bottom:12px;">🎉</div>
+        <h4 style="font-size:18px;font-weight:900;margin-bottom:8px;">Đăng ký thành công!</h4>
+        <p style="color:#6B5B78;font-size:14px;line-height:1.7;">Cảm ơn bạn đã quan tâm đến KeToan.<br>Chúng tôi sẽ liên hệ trong vòng <strong>30 phút</strong>.</p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Đóng khi click backdrop
+  modal.addEventListener("click", e => { if(e.target === modal) closeRegModal(); });
+  document.addEventListener("keydown", e => { if(e.key === "Escape") closeRegModal(); });
+
+  // Submit form → gửi mail qua mailto (hoặc formspree)
+  document.getElementById("modalRegForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const btn = this.querySelector("button[type=submit]");
+  const d   = Object.fromEntries(new FormData(this));
+
+  btn.textContent = "Đang gửi...";
+  btn.disabled    = true;
+
+  emailjs.send(
+    "service_6zzl60q",   
+    "template_xh4goo3",   
+    {
+      to_email : "phihasky@gmail.com",
+      from_name: d.name,
+      email    : d.email,
+      phone    : d.phone,
+      tax      : d.tax    || "N/A",
+      product  : d.product|| "N/A",
+    }
+  )
+  .then(() => {
+    this.style.display = "none";
+    document.getElementById("modalSuccess").style.display = "block";
+  })
+  .catch(err => {
+    btn.textContent = "NHẬN TƯ VẤN NGAY";
+    btn.disabled    = false;
+    alert("Gửi thất bại, vui lòng thử lại!\n" + JSON.stringify(err));
+  });
+
+  // Load EmailJS SDK động
+  const ejsScript = document.createElement("script");
+  ejsScript.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+  ejsScript.onload = () => emailjs.init("VxLy2TYylhklg9NR5"); 
+  document.head.appendChild(ejsScript);
+});
 
   /* burger toggle */
   document.getElementById("burger").addEventListener("click", () => {
@@ -173,7 +248,7 @@ function renderFooter() {
     <hr class="footer-divider"/>
     <div class="footer-bottom">
       <div>© 2024 <span class="brand-color">KeToan</span> – Phần mềm kế toán online</div>
-      <div>Hotline: <span class="brand-color">0869 425 631</span> &nbsp;|&nbsp; <a href="#">Chính sách bảo mật</a> &nbsp;|&nbsp; <a href="#">Điều khoản</a></div>
+      <div>Hotline: <span class="brand-color">0392 405 600</span> &nbsp;|&nbsp; <a href="#">Chính sách bảo mật</a> &nbsp;|&nbsp; <a href="#">Điều khoản</a></div>
     </div>
   `;
   document.body.appendChild(footer);
@@ -187,13 +262,13 @@ function renderMarquee() {
   el.className = "marquee-band";
   el.innerHTML = `
     <div class="marquee-track">
-      <span>🏆 50,000+ Doanh nghiệp</span>
+      <span>🏆 500+ Doanh nghiệp</span>
       <span>⚡ Tự động hóa 90%</span>
       <span>🔒 Bảo mật chuẩn ngân hàng</span>
       <span>📱 Dùng trên mọi thiết bị</span>
       <span>🎁 Dùng thử miễn phí 30 ngày</span>
       <span>✅ Cập nhật pháp luật liên tục</span>
-      <span>🏆 50,000+ Doanh nghiệp</span>
+      <span>🏆 500+ Doanh nghiệp</span>
       <span>⚡ Tự động hóa 90%</span>
       <span>🔒 Bảo mật chuẩn ngân hàng</span>
       <span>📱 Dùng trên mọi thiết bị</span>
@@ -219,4 +294,15 @@ function renderCTABand() {
     <button class="btn-white">DÙNG THỬ MIỄN PHÍ →</button>
   `;
   return el;
+}
+
+function openRegModal() {
+  const m = document.getElementById("regModal");
+  m.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+function closeRegModal() {
+  const m = document.getElementById("regModal");
+  m.style.display = "none";
+  document.body.style.overflow = "";
 }

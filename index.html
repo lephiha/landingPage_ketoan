@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init("VxLy2TYylhklg9NR5");</script>  
 </head>
 <body>
 
@@ -164,8 +166,287 @@
   </div>
 </section>
 
+<!-- ── VIDEO DEMO ── -->
+<section class="section-pad" style="background:var(--white)">
+  <div class="demo-section-wrap">
+    <!-- Video block -->
+    <div class="demo-video-block" data-gsap="fade-up">
+      <div class="demo-video-inner" id="videoBox">
+        <div class="demo-video-bg"></div>
+        <div class="demo-play-btn" id="playBtn">
+          <div class="demo-play-icon"></div>
+        </div>
+        <div class="demo-play-label">Xem video giới thiệu</div>
+        <!-- pulse rings -->
+        <div class="pulse-ring r1"></div>
+        <div class="pulse-ring r2"></div>
+      </div>
+      <!-- iframe hidden until play -->
+      <iframe id="demoIframe" style="display:none;width:100%;height:360px;border:none;border-radius:20px;"
+        src="" allowfullscreen title="KeToan Demo Video"></iframe>
+    </div>
+
+    <!-- Text block -->
+    <div class="demo-text-block">
+      <div class="section-label" data-gsap="fade-up">Video hướng dẫn</div>
+      <h2 class="section-title" data-gsap="fade-up" data-delay=".06">Xem KeToan hoạt động<br>như thế nào</h2>
+      <p class="section-sub" data-gsap="fade-up" data-delay=".12">Chỉ 5 phút để hiểu cách KeToan giúp tiết kiệm hàng giờ làm kế toán mỗi ngày.</p>
+
+      <ul class="demo-feature-list">
+        <li data-gsap="fade-up" data-delay=".18">
+          <div class="demo-feat-icon" style="background:var(--pink-pale);">⚡</div>
+          <div>
+            <strong>Nhập liệu tự động</strong>
+            <span>Không cần gõ tay. Kết nối nguồn dữ liệu, mọi thứ tự nhập.</span>
+          </div>
+        </li>
+        <li data-gsap="fade-up" data-delay=".24">
+          <div class="demo-feat-icon" style="background:#EEF2FF;">📊</div>
+          <div>
+            <strong>Báo cáo thông minh</strong>
+            <span>Dashboard trực quan, biểu đồ rõ ràng giúp ra quyết định nhanh.</span>
+          </div>
+        </li>
+        <li data-gsap="fade-up" data-delay=".30">
+          <div class="demo-feat-icon" style="background:#ECFDF5;">✅</div>
+          <div>
+            <strong>Tuân thủ pháp luật</strong>
+            <span>Luôn cập nhật theo thông tư mới nhất của Bộ Tài chính.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── REGISTRATION FORM ── -->
+<section class="reg-section" id="dang-ky">
+  <!-- bg overlay -->
+  <div class="reg-bg-overlay"></div>
+
+  <div class="reg-wrap">
+    <!-- Left: benefits -->
+    <div class="reg-left" data-gsap="fade-up">
+      <h2 class="reg-title">ĐĂNG KÝ NHẬN TƯ VẤN VÀ<br>DÙNG THỬ MIỄN PHÍ</h2>
+      <ul class="reg-benefits">
+        <li><span class="reg-check">✓</span>Hơn 3 năm kinh nghiệm đồng hành cùng 500+ doanh nghiệp, hộ kinh doanh</li>
+        <li><span class="reg-check">✓</span>Đáp ứng đầy đủ nghiệp vụ kế toán theo quy định TT99, TT133, TT152</li>
+        <li><span class="reg-check">✓</span>Miễn phí cập nhật nhanh chóng, chính xác các thông tư, nghị định mới nhất</li>
+        <li><span class="reg-check">✓</span>Miễn phí kết nối Thuế điện tử, hóa đơn điện tử, ngân hàng điện tử...</li>
+        <li><span class="reg-check">✓</span>Giá tiết kiệm nhất trên thị trường, chỉ từ 490K/tháng</li>
+        <li><span class="reg-check">✓</span>Không giới hạn người dùng, làm việc online mọi lúc mọi nơi</li>
+        <li><span class="reg-check">✓</span>Tuỳ chỉnh phần mềm theo yêu cầu đặc thù của từng khách hàng</li>
+        <li><span class="reg-check">✓</span>Đội ngũ tư vấn thành thạo nghiệp vụ, hỗ trợ nhanh chóng 24/7</li>
+      </ul>
+    </div>
+
+    <!-- Right: form card -->
+    <div class="reg-card" data-gsap="slide-left" data-delay=".1">
+      <h3 class="reg-card-title">ĐĂNG KÝ NHẬN TƯ VẤN VÀ DÙNG THỬ</h3>
+      <div class="reg-gift">🎁 Tặng 100 số hoá đơn đầu vào</div>
+
+      <form class="reg-form" id="regForm" onsubmit="submitForm(event)">
+        <div class="reg-field">
+          <input type="text"  name="name"  placeholder="Họ và tên *" required/>
+        </div>
+        <div class="reg-field">
+          <input type="email" name="email" placeholder="Email *" required/>
+        </div>
+        <div class="reg-field">
+          <input type="tel"   name="phone" placeholder="Số điện thoại *" required/>
+        </div>
+        <div class="reg-field">
+          <input type="text"  name="tax"   placeholder="Mã số thuế *"/>
+        </div>
+        <div class="reg-field">
+          <select name="product">
+            <option value="" disabled selected>Chọn sản phẩm quan tâm *</option>
+            <option>Kế toán doanh nghiệp</option>
+            <option>Kế toán hộ kinh doanh</option>
+            <option>Dịch vụ kế toán</option>
+            <option>Hóa đơn điện tử</option>
+          </select>
+        </div>
+        <button type="submit" class="reg-submit">NHẬN TƯ VẤN NGAY</button>
+      </form>
+
+      <!-- success state (hidden) -->
+      <div class="reg-success" id="regSuccess" style="display:none;">
+        <div class="reg-success-icon">🎉</div>
+        <h4>Đăng ký thành công!</h4>
+        <p>Cảm ơn bạn đã quan tâm đến KeToan.<br>Chúng tôi sẽ liên hệ trong vòng <strong>30 phút</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA + FOOTER injected by components.js -->
 <div id="cta-slot"></div>
+
+<style>
+/* ── VIDEO DEMO ── */
+.demo-section-wrap {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  max-width: 1200px; margin: 0 auto;
+}
+.demo-video-block { position: relative; min-height: 360px; }
+.demo-video-inner {
+  position: relative; border-radius: 20px; overflow: hidden;
+  background: 
+    linear-gradient(135deg, rgba(26,5,48,.75) 0%, rgba(61,16,87,.7) 50%, rgba(124,26,74,.75) 100%),
+    url('https://img.youtube.com/vi/SlQR9iu09bQ/maxresdefault.jpg') center/cover no-repeat;
+  aspect-ratio: 16/9;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 24px 56px rgba(124,63,142,.28);
+  transition: transform .25s, box-shadow .25s;
+}
+.demo-video-inner:hover { transform: scale(1.02); box-shadow: 0 32px 72px rgba(124,63,142,.38); }
+.demo-video-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(200,57,106,.25) 0%, transparent 70%);
+}
+.demo-play-btn {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,.95);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  transition: transform .2s, box-shadow .2s;
+}
+.demo-video-inner:hover .demo-play-btn { transform: scale(1.1); box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+.demo-play-icon {
+  border-left: 28px solid var(--pink);
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  margin-left: 7px;
+}
+.demo-play-label {
+  margin-top: 16px; color: rgba(255,255,255,.65);
+  font-size: 13px; font-weight: 600; position: relative; z-index: 2;
+}
+/* pulse rings */
+.pulse-ring {
+  position: absolute; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.25);
+  animation: demoRing 2.2s ease-out infinite;
+}
+.r1 { width: 110px; height: 110px; animation-delay: 0s; }
+.r2 { width: 150px; height: 150px; animation-delay: .6s; }
+@keyframes demoRing {
+  0%   { transform: scale(.8); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* feature list */
+.demo-feature-list { list-style: none; margin-top: 28px; }
+.demo-feature-list li {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid var(--gray-border);
+}
+.demo-feat-icon {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.demo-feature-list li strong { display: block; font-size: 15px; font-weight: 800; color: var(--text-dark); margin-bottom: 3px; }
+.demo-feature-list li span  { font-size: 13.5px; color: var(--gray-text); line-height: 1.6; }
+
+/* ── REG SECTION ── */
+.reg-section {
+  position: relative; overflow: hidden;
+  background: var(--pink);
+  padding: 80px 48px;
+}
+.reg-bg-overlay {
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+}
+.reg-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(120deg, rgba(124,63,142,.5) 0%, transparent 60%);
+  pointer-events: none;
+}
+.reg-wrap {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 480px; gap: 64px; align-items: center;
+  max-width: 1200px; margin: 0 auto;
+}
+.reg-title {
+  font-size: 32px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 32px;
+}
+.reg-benefits { list-style: none; }
+.reg-benefits li {
+  display: flex; gap: 12px; align-items: flex-start;
+  color: rgba(255,255,255,.9); font-size: 14.5px; font-weight: 500;
+  padding: 8px 0; line-height: 1.55;
+}
+.reg-check {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900; color: #fff; margin-top: 1px;
+}
+
+/* form card */
+.reg-card {
+  background: #fff; border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.2);
+}
+.reg-card-title {
+  font-size: 14px; font-weight: 800; color: var(--text-dark);
+  text-align: center; letter-spacing: .5px; margin-bottom: 10px;
+}
+.reg-gift {
+  text-align: center; color: var(--pink); font-size: 14px; font-weight: 700;
+  margin-bottom: 24px;
+}
+.reg-form { display: flex; flex-direction: column; gap: 12px; }
+.reg-field input,
+.reg-field select {
+  width: 100%; padding: 13px 16px;
+  border: 1.5px solid var(--gray-border); border-radius: 10px;
+  font-size: 14px; font-family: inherit; color: var(--text-dark);
+  outline: none; background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+}
+.reg-field input:focus,
+.reg-field select:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(200,57,106,.1);
+}
+.reg-field input::placeholder { color: #aaa; }
+.reg-field select { color: #aaa; cursor: pointer; }
+.reg-field select:valid { color: var(--text-dark); }
+.reg-submit {
+  width: 100%; padding: 15px;
+  background: var(--grad-brand); color: #fff;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 800; font-family: inherit;
+  cursor: pointer; letter-spacing: .5px;
+  box-shadow: 0 6px 20px rgba(200,57,106,.4);
+  transition: transform .2s, box-shadow .2s;
+  margin-top: 4px;
+}
+.reg-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(200,57,106,.5); }
+.reg-submit:active { transform: translateY(0); }
+
+/* success state */
+.reg-success {
+  text-align: center; padding: 32px 16px;
+}
+.reg-success-icon { font-size: 56px; margin-bottom: 16px; }
+.reg-success h4 { font-size: 20px; font-weight: 900; color: var(--text-dark); margin-bottom: 10px; }
+.reg-success p  { font-size: 14.5px; color: var(--gray-text); line-height: 1.7; }
+
+@media (max-width: 900px) {
+  .demo-section-wrap { grid-template-columns: 1fr; gap: 36px; }
+  .reg-wrap { grid-template-columns: 1fr; }
+  .reg-section { padding: 56px 24px; }
+  .reg-title { font-size: 24px; }
+  .reg-card { padding: 28px 20px; }
+}
+</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -180,5 +461,50 @@
   renderFooter();
 </script>
 <script src="main.js"></script>
+<script>
+/* ── VIDEO PLAY ── */
+document.getElementById("videoBox").addEventListener("click", function() {
+  const iframe = document.getElementById("demoIframe");
+  // Thay YOUR_VIDEO_ID bằng ID video YouTube thật của bạn
+  iframe.src = "https://www.youtube.com/embed/SlQR9iu09bQ?autoplay=1";
+  this.style.display = "none";
+  iframe.style.display = "block";
+  gsap.fromTo(iframe, {opacity:0}, {opacity:1, duration:.4});
+});
+
+/* ── FORM SUBMIT ── */
+function submitForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector(".reg-submit");
+  const d   = Object.fromEntries(new FormData(e.target));
+
+  btn.textContent = "Đang gửi...";
+  btn.disabled    = true;
+
+  emailjs.send(
+    "SERVICE_ID",
+    "TEMPLATE_ID",
+    {
+      to_email : "phihasky@gmail.com",
+      from_name: d.name,
+      email    : d.email,
+      phone    : d.phone,
+      tax      : d.tax    || "N/A",
+      product  : d.product|| "N/A",
+    }
+  )
+  .then(() => {
+    e.target.style.display = "none";
+    const s = document.getElementById("regSuccess");
+    s.style.display = "block";
+    gsap.fromTo(s, {opacity:0,y:20}, {opacity:1,y:0,duration:.5});
+  })
+  .catch(err => {
+    btn.textContent = "NHẬN TƯ VẤN NGAY";
+    btn.disabled    = false;
+    alert("Gửi thất bại!\n" + JSON.stringify(err));
+  });
+}
+</script>
 </body>
 </html>
