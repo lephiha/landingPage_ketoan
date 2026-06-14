@@ -187,17 +187,17 @@ function renderNavbar(activePage = "") {
 /* ════════════════════════════════════════
    SOCIAL FLOAT
 ════════════════════════════════════════ */
-function renderSocialFloat() {
-  const el = document.createElement("div");
-  el.className = "social-float";
-  el.innerHTML = `
-    <a class="sf-btn sf-zalo1" href="#" title="Zalo OA">Z</a>
-    <a class="sf-btn sf-zalo2" href="#" title="Zalo Chat">Z</a>
-    <a class="sf-btn sf-fb"   href="#" title="Facebook">f</a>
-    <a class="sf-btn sf-ph"   href="#" title="Hotline">📞</a>
-  `;
-  document.body.appendChild(el);
-}
+// function renderSocialFloat() {
+//   const el = document.createElement("div");
+//   el.className = "social-float";
+//   el.innerHTML = `
+//     <a class="sf-btn sf-zalo1" href="#" title="Zalo OA">Z</a>
+//     <a class="sf-btn sf-zalo2" href="#" title="Zalo Chat">Z</a>
+//     <a class="sf-btn sf-fb"   href="#" title="Facebook">f</a>
+//     <a class="sf-btn sf-ph"   href="#" title="Hotline">📞</a>
+//   `;
+//   document.body.appendChild(el);
+// }
 
 /* ════════════════════════════════════════
    FOOTER HTML
